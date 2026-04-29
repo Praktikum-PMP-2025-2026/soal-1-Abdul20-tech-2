@@ -3,8 +3,7 @@
  *   Hari dan Tanggal    : Rabu, 29 April 2026
  *   Nama (NIM)          : Abdullah (13224101)
  *   Nama File           : soal2.c
- *   Deskripsi           : Program yang menerima input struct tipe data artefak berdasarkan nama, kategori, tahun, dan nilai.
- *                         Kemudian mengurutkan data tersebut dengan prioritas alfabet kategori naik, tahun naik, nilai turun, alfabet nama naik
+ *   Deskripsi           : 
  * 
  */
 
@@ -12,6 +11,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
   
 typedef struct artefak{
     char *nama;
@@ -21,12 +21,8 @@ typedef struct artefak{
 }artefak;
 
 artefak* masukkanartefak(artefak *data, int *N){
-    
-    printf("\ndata ke %d", *N);
 
     (*N)++;
-    
-    printf("\ndata ke %d", *N);
 
     data = (artefak*)realloc(data, (*N) * sizeof(artefak));
 
@@ -37,48 +33,82 @@ artefak* masukkanartefak(artefak *data, int *N){
 
     char buffer1[100], buffer2[100];
 
-    printf("\nNama: ");
     scanf(" %[^\n]", buffer1);
     data[*N - 1].nama = (char*)malloc((strlen(buffer1) + 1) * sizeof(char));
     strcpy(data[*N - 1].nama, buffer1);
 
-    printf("Kategori: ");
     scanf(" %[^\n]", buffer2);
     data[*N - 1].kategori = (char*)malloc((strlen(buffer2) + 1) * sizeof(char));
     strcpy(data[*N - 1].kategori, buffer2);
 
-    printf("Tahun: ");
     scanf("%d", &data[*N - 1].tahun);
-    printf("Nilai: ");
     scanf("%d", &data[*N - 1].nilai);
 
     (*N)--;
-
-    printf("\ndata ke %d", *N);
     
     return data;
 }
 
+int compare(artefak a, artefak b){
+    if (strcmp(a.kategori, b.kategori)> 0){
+        return 1;
+    }else if (strcmp(a.kategori, b.kategori)== 0)
+    {
+        if (a.tahun > b.tahun)
+        {
+            return 1;
+        }else if (a.tahun == b.tahun)
+        {
+            if (a.nilai < b.nilai)
+            {
+                return 1;
+            }else if (a.nilai == b.nilai)
+            {
+                if (strcmp(a.nama, b.nama)> 0)
+                {
+                    return 1;
+                }   
+            }
+        }
+    }
+    
+    
+    return 0;
+}
+
 void printtotalnilai(artefak *data, int N){
-    printf("\nUrutan: ");
     for (int i = 0; i < N; i++){
-        printf("\nNama: %s \nKategori: %s \nTahun: %d\nNilai: %d\n", data[i].nama, data[i].kategori, data[i].tahun, data[i].nilai);
+        printf("%s %s %d %d\n", data[i].nama, data[i].kategori, data[i].tahun, data[i].nilai);
     }   
 }
 
 int main() {
     int N;
+    bool isSorted;
     artefak *data = NULL;
     scanf("%d", &N);
-    printf("nilai N: %d", N);
-
     
+    int n = sizeof(data) / sizeof(data[0]);
     
     for (int i = 0; i < N; i++){
-        printf("\nmasuk for %d\n", i);
         data = masukkanartefak(data, &i);
     }
 
+    for (int i = 0; i < N; i++){
+        isSorted = true;
+        for (int j = 0; j < N-1; j++){
+            if (compare(data[j], data[j+1])){
+                artefak temp = data[j];
+                data[j] = data [j+1];
+                data [j+1] = temp;
+                isSorted = false;
+            }
+        }
+        if (isSorted == true){
+            break;
+        }
+    }
+    
     printtotalnilai(data, N);
     return 0;
 }
