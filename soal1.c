@@ -3,7 +3,8 @@
  *   Hari dan Tanggal    : Rabu, 29 April 2026
  *   Nama (NIM)          : Abdullah (13224101)
  *   Nama File           : soal2.c
- *   Deskripsi           : 
+ *   Deskripsi           : Program yang menerima input struct tipe data artefak berdasarkan nama, kategori, tahun, dan nilai.
+ *                         Kemudian mengurutkan data tersebut dengan prioritas alfabet kategori naik, tahun naik, nilai turun, alfabet nama naik
  * 
  */
 
